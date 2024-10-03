@@ -35,53 +35,15 @@ import userRoute from "./routes/user.route.js";
 
 const app = express();
 
-// Lista de orígenes permitidos
-const allowedOrigins = [
-  "https://rentapp-final-j2ac.vercel.app", // Frontend en producción
-  "https://rentapp-final-j2ac-i11ita8fr-alan-arriagas-projects.vercel.app", // Frontend en producción
-  "https://rentapp-final-and9.vercel.app",
-];
-
-// Configuración de CORS para manejar múltiples orígenes
+// Allow all origins and methods with CORS
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Permitir cualquier puerto para localhost en desarrollo
-      const isLocalhost = origin && origin.startsWith("http://localhost");
-      if (!origin || allowedOrigins.includes(origin) || isLocalhost) {
-        callback(null, true);
-      } else {
-        callback(new Error("No autorizado por CORS"));
-      }
-    },
-    credentials: true, // Habilitar envío de cookies/credenciales
-    methods: "GET, POST, PUT, DELETE, OPTIONS", // Métodos permitidos
-    allowedHeaders:
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization", // Encabezados permitidos
+    origin: "*", // Allow any origin
+    credentials: true, // Enable credentials (cookies, etc.)
+    methods: "GET, POST, PUT, DELETE, OPTIONS", // Allowed methods
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization", // Allowed headers
   })
 );
-
-// Middleware para manejar solicitudes preflight (`OPTIONS`)
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    const origin = req.headers.origin;
-    const isLocalhost = origin && origin.startsWith("http://localhost");
-    if (allowedOrigins.includes(origin) || isLocalhost) {
-      res.header("Access-Control-Allow-Origin", origin);
-    }
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    return res.sendStatus(200); // Responder exitosamente a las solicitudes preflight
-  }
-  next();
-});
 
 app.use(express.json());
 app.use(cookieParser());
