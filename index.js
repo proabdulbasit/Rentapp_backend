@@ -35,15 +35,7 @@ import userRoute from "./routes/user.route.js";
 
 const app = express();
 
-// Allow all origins and methods with CORS
-app.use(
-  cors({
-    origin: "*", // Allow any origin
-    credentials: true, // Enable credentials (cookies, etc.)
-    methods: "GET, POST, PUT, DELETE, OPTIONS", // Allowed methods
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization", // Allowed headers
-  })
-);
+app.use(cors({ origin: true, credentials: true }));
 
 app.use(express.json());
 app.use(cookieParser());
